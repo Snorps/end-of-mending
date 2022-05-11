@@ -34,13 +34,9 @@ credits="snorpie snorple snip snops :3" #optional
 authors="those snorps" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-In modern versions with mending and rocket boosting, the elytra is effectively just survival flight that renders all other transport obsolete.
+Removes mending and rebalances repair cost in order to extend the gather/repair gameplay loop into the late-game.
 
-However, prior to the addition of firework boosting, the elytra behaved something like a hang glider. The player was encouraged to search for high points to glide off of, and even had to judge whether the elytra was the best option for getting from one place to another.
-
-This mod removes rocket boosting entirely; encouraging the player to use other means of transportation and engage more deeply in the world around them.
-
-Mod icon is all practical effects ;)
+Mending is made unobtainable in survival, and repair takes 2 resources (down from 4) as well as a flat, non-increasing xp cost based on the total levels of enchantments on the item.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.endofmending]] #optional
