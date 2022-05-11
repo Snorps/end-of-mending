@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "net.snorps.endofmending.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "endofmending.refmap.json",
+	"mixins": [
+		"MendingEnchantmentMixin",
+		"EnchantmentMixin",
+		"AnvilMenuMixin"
+	],
+	"client": [
+	],
+	"minVersion": "0.8"
+}
