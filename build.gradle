@@ -29,7 +29,7 @@ mixin {
 
 
 
-version = '0.0.2'
+version = '0.0.4'
 group = 'net.snorps.endofmending' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'endofmending'
 
