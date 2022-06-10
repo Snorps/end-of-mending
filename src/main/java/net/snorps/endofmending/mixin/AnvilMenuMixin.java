@@ -2,6 +2,8 @@ package net.snorps.endofmending.mixin;
 
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -51,10 +53,10 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         ItemStack output = resultSlots.getItem(0);
 
         boolean overrideCost = false;
-
+        boolean isDontAffect = ItemTags.getAllTags().getTag(new ResourceLocation("endofmending:dont_affect")).contains(input1.getItem());
         int damageValue = input1.getDamageValue();
         //only triggers when a material is used to repair a tool (e.g diamond pickaxe and a diamond)
-        if (input1.isDamageableItem() && input1.getItem().isValidRepairItem(input1, input2)) {
+        if (input1.isDamageableItem() && input1.getItem().isValidRepairItem(input1, input2) && !isDontAffect) {
             overrideCost = true;
             int l2 = Math.min(damageValue, input1.getMaxDamage() / REPAIR_ITEMS);
             if (l2 <= 0) {
@@ -74,11 +76,11 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             ((AnvilMenu)(Object)this).repairItemCountCost = i3;
         }
         float costMult = 1;
-        if (input1.isDamageableItem() && input2.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(input2).isEmpty()) {
+        if (input1.isDamageableItem() && input2.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(input2).isEmpty() && !isDontAffect) {
             overrideCost = true;
             costMult = REPAIR_ITEMS;
         }
-        if (input1.isDamageableItem() && input1.is(input2.getItem())) {
+        if (input1.isDamageableItem() && input1.is(input2.getItem()) && !isDontAffect) {
             overrideCost = true;
             costMult = REPAIR_ITEMS;
         }
