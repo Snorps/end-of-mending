@@ -53,63 +53,67 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         ItemStack output = resultSlots.getItem(0);
 
         boolean overrideCost = false;
-        boolean isDontAffect = ItemTags.getAllTags().getTag(new ResourceLocation("endofmending:dont_affect")).contains(input1.getItem());
+        //boolean isDontAffect = ItemTags.getAllTags().getTag(new ResourceLocation("endofmending:dont_affect")).contains(input1.getItem());
+        boolean isDontAffect = input1.is(EndOfMending.DONT_AFFECT);
+        //boolean isDontAffect = false;
         int damageValue = input1.getDamageValue();
-        //only triggers when a material is used to repair a tool (e.g diamond pickaxe and a diamond)
-        if (input1.isDamageableItem() && input1.getItem().isValidRepairItem(input1, input2) && !isDontAffect) {
-            overrideCost = true;
-            int l2 = Math.min(damageValue, input1.getMaxDamage() / REPAIR_ITEMS);
-            if (l2 <= 0) {
-                this.resultSlots.setItem(0, ItemStack.EMPTY);
-                this.cost.set(0);
-                return;
+        if (!isDontAffect) {
+            //only triggers when a material is used to repair a tool (e.g diamond pickaxe and a diamond)
+            if (input1.isDamageableItem() && input1.getItem().isValidRepairItem(input1, input2)) {
+                overrideCost = true;
+                int l2 = Math.min(damageValue, input1.getMaxDamage() / REPAIR_ITEMS);
+                if (l2 <= 0) {
+                    this.resultSlots.setItem(0, ItemStack.EMPTY);
+                    this.cost.set(0);
+                    return;
+                }
+
+                int i3;
+                for (i3 = 0; l2 > 0 && i3 < input2.getCount(); ++i3) {
+                    int j3 = damageValue - l2;
+                    damageValue = j3;
+                    l2 = Math.min(damageValue, input1.getMaxDamage() / REPAIR_ITEMS);
+                }
+
+                output.setDamageValue(damageValue);
+                ((AnvilMenu) (Object) this).repairItemCountCost = i3;
+            }
+            float costMult = 1;
+            if (input1.isDamageableItem() && input2.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(input2).isEmpty() && !isDontAffect) {
+                overrideCost = true;
+                costMult = REPAIR_ITEMS;
+            }
+            if (input1.isDamageableItem() && input1.is(input2.getItem()) && !isDontAffect) {
+                overrideCost = true;
+                costMult = REPAIR_ITEMS;
             }
 
-            int i3;
-            for(i3 = 0; l2 > 0 && i3 < input2.getCount(); ++i3) {
-                int j3 = damageValue - l2;
-                damageValue = j3;
-                l2 = Math.min(damageValue, input1.getMaxDamage() / REPAIR_ITEMS);
+            ListTag enchants = output.getEnchantmentTags();
+            int totallevel = 0;
+            //get total levels of enchants on tool
+            for (int c = 0; c < enchants.size(); c++) {
+                String lvl = enchants.getCompound(c).get("lvl").toString();
+                int lvlnum = Integer.parseInt(lvl.substring(0, lvl.length() - 1));
+                totallevel += lvlnum;
+            }
+            int repaircost = input1.getBaseRepairCost() + 1;
+            int enchantBasedRepairCost = floor(totallevel * 0.8);
+            if (enchantBasedRepairCost < input1.getBaseRepairCost()) {
+                repaircost = enchantBasedRepairCost + 1;
+            }
+            if (overrideCost) {
+                if (repaircost < 3) {
+                    repaircost = 3;
+                }
+                repaircost = enchantBasedRepairCost + 1;
             }
 
-            output.setDamageValue(damageValue);
-            ((AnvilMenu)(Object)this).repairItemCountCost = i3;
-        }
-        float costMult = 1;
-        if (input1.isDamageableItem() && input2.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(input2).isEmpty() && !isDontAffect) {
-            overrideCost = true;
-            costMult = REPAIR_ITEMS;
-        }
-        if (input1.isDamageableItem() && input1.is(input2.getItem()) && !isDontAffect) {
-            overrideCost = true;
-            costMult = REPAIR_ITEMS;
-        }
-
-        ListTag enchants = output.getEnchantmentTags();
-        int totallevel = 0;
-        //get total levels of enchants on tool
-        for (int c = 0; c < enchants.size(); c++) {
-            String lvl = enchants.getCompound(c).get("lvl").toString();
-            int lvlnum = Integer.parseInt(lvl.substring(0, lvl.length() - 1));
-            totallevel += lvlnum;
-        }
-        int repaircost = input1.getBaseRepairCost() + 1;
-        int enchantBasedRepairCost = floor(totallevel * 0.8);
-        if (enchantBasedRepairCost < input1.getBaseRepairCost()) {
-            repaircost = enchantBasedRepairCost + 1;
-        }
-        if (overrideCost) {
-            if (repaircost < 3) {
-                repaircost = 3;
+            repaircost *= costMult;
+            if (this.repairItemCountCost > 0) {
+                cost.set(repaircost * this.repairItemCountCost);
+            } else {
+                cost.set(repaircost);
             }
-            repaircost = enchantBasedRepairCost + 1;
-        }
-
-        repaircost *= costMult;
-        if (this.repairItemCountCost > 0) {
-            cost.set(repaircost * this.repairItemCountCost);
-        } else {
-            cost.set(repaircost);
         }
     }
 

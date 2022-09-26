@@ -1,5 +1,10 @@
 package net.snorps.endofmending;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,6 +28,8 @@ public class EndOfMending
 {
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
+
+    public static final TagKey<Item> DONT_AFFECT = ItemTags.create(new ResourceLocation("endofmending", "dont_affect"));
 
     public EndOfMending() {
         System.out.println("[420:69:11] [among]: Us");
@@ -69,9 +76,10 @@ public class EndOfMending
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
+        public static void onItemTagsRegistry(final RegistryEvent.Register<Tag<Item>> blockRegistryEvent) {
             // register a new block here
             LOGGER.info("HELLO from Register Block");
         }
-    }*/
+    }
+    */
 }
