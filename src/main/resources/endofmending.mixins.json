@@ -6,7 +6,8 @@
 	"mixins": [
 		"MendingEnchantmentMixin",
 		"EnchantmentMixin",
-		"AnvilMenuMixin"
+		"AnvilMenuMixin",
+		"ArmorMaterialsMixin"
 	],
 	"client": [
 	],
