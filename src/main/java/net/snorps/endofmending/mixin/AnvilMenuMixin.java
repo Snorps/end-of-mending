@@ -36,7 +36,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
     private static final Logger LOGGER = LogManager.getLogger();
 
     //defaults to 4 in vanilla
-    private static final int REPAIR_ITEMS = 2;
+    private static final int REPAIR_ITEMS = 1;
 
     @Shadow
     @Final
